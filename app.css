@@ -4,7 +4,7 @@ body, html {
 }
 
 #videos {
-    position: relative;
+    float: left;
     width: 80%;
     height: 100%;
     margin-left: auto;
@@ -12,7 +12,7 @@ body, html {
 }
 
 #console {
-    position: relative;
+    float: right;
     width: 20%;
     height: 100%;
     margin-left: auto;
