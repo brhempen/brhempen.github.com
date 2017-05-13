@@ -30,8 +30,10 @@ function initializeSession() {
             });
 
     subscriber.on('audioLevelUpdated', function (event) {
-        console.log(event.audioLevel);
+        console.log("suscriber audioLevel " + event.audioLevel);
     });
+    
+    subscriber.setStyle('audioLevelDisplayMode', 'on');
 
         /*
 
@@ -80,6 +82,10 @@ function initializeSession() {
                 insertMode: 'append',
                 width: '100%',
                 height: '100%'
+            });
+
+            publisher.on('audioLevelUpdated', function(event) {
+                console.log("publisher audioLevel " + event.audioLevel);
             });
 
             session.publish(publisher);
