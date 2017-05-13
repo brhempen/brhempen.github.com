@@ -31,7 +31,7 @@ function initializeSession() {
 
     subscriber.on('audioLevelUpdated', function (event) {
         console.log(event.audioLevel);
-    }
+    });
 
         /*
 
