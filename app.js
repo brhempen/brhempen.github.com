@@ -92,6 +92,9 @@ function initializeSession() {
                 console.log("publisher audioLevel " + event.audioLevel);
             });
 
+            publisher.setStyle('audioLevelDisplayMode', 'on');
+
+
             session.publish(publisher);
         } else {
             logToConsole('There was an error connecting to the session: ', error.code, error.message);
