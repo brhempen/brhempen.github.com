@@ -8,6 +8,10 @@ $(document).ready(function () {
     initializeSession();
 });
 
+function logToConsole(s){
+    $('console').append('<p>' + s + '</p>');
+}
+
 function initializeSession() {
     var session = OT.initSession(apiKey, sessionId);
 
