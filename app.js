@@ -13,7 +13,11 @@ function initializeSession() {
 
     // Subscribe to a newly created stream
     session.on('streamCreated', function (event) {
-        var subscriberProperties = { insertMode: 'append' };
+        var subscriberProperties = { 
+            insertMode: 'append',
+            width: '100%',
+            height: '100%' 
+        };
         var subscriber = session.subscribe(event.stream,
             'subscriber',
             subscriberProperties,
