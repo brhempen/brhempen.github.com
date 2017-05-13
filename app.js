@@ -27,6 +27,7 @@ function initializeSession() {
                     console.log('Subscriber added.');
                 }
             });
+        /*    
         SpeakerDetection(subscriber, function () {
             console.log('started talking');
         }, function () {
@@ -61,6 +62,7 @@ function initializeSession() {
                 }
             });
         };
+        */
 
     });
 
