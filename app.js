@@ -29,6 +29,12 @@ function initializeSession() {
                 }
             });
 
+    subscriber.on('audioLevelUpdated', function (event) {
+        console.log(event.audioLevel);
+    }
+
+        /*
+
         SpeakerDetection(subscriber, function () {
             console.log('started talking');
         }, function () {
@@ -63,6 +69,7 @@ function initializeSession() {
                 }
             });
         };
+        */
     });
 
     // Connect to the session
