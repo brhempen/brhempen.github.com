@@ -34,7 +34,7 @@ function initializeSession() {
             });
 
     subscriber.on('audioLevelUpdated', function (event) {
-        console.log("suscriber audioLevel " + event.audioLevel);
+        logToConsole("suscriber audioLevel " + event.audioLevel);
     });
     
     subscriber.setStyle('audioLevelDisplayMode', 'on');
@@ -94,7 +94,7 @@ function initializeSession() {
 
             session.publish(publisher);
         } else {
-            console.log('There was an error connecting to the session: ', error.code, error.message);
+            logToConsole('There was an error connecting to the session: ', error.code, error.message);
         }
     });
 
