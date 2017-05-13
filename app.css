@@ -5,7 +5,15 @@ body, html {
 
 #videos {
     position: relative;
-    width: 100%;
+    width: 80%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#console {
+    position: relative;
+    width: 20%;
     height: 100%;
     margin-left: auto;
     margin-right: auto;
