@@ -3,14 +3,21 @@ var apiKey = '45840352';
 var sessionId = '2_MX40NTg0MDM1Mn5-MTQ5NDY3OTM3NDcxNX54bVZGdnh5MDdqQ3BWQ1ZJMnRFcVREYU9-fg';
 var token = 'T1==cGFydG5lcl9pZD00NTg0MDM1MiZzaWc9MWZmM2MzYjAxMjYxMWQwNjkzYTE2NDgwZmQxODk0MjIyNjFlYWFjZjpzZXNzaW9uX2lkPTJfTVg0ME5UZzBNRE0xTW41LU1UUTVORFkzT1RNM05EY3hOWDU0YlZaR2RuaDVNRGRxUTNCV1ExWkpNblJGY1ZSRVlVOS1mZyZjcmVhdGVfdGltZT0xNDk0Njc5Mzk1Jm5vbmNlPTAuMTkwNTQ0NTQ4Nzg4OTk4OTYmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTQ5NzI3MTQwMQ==';
 
+var userId = "id" + Math.random().toString(16).slice(2);
+
+
 $(document).ready(function () {
     // (optional) add server code here
     initializeSession();
 });
 
-function logToConsole(s){
-    $('console').append('<p>' + s + '</p>');
+function logToConsole(s) {
+    var timeNow = new Date();
+    var timeStamp = timeNow.toLocaleTimeString();
+    $("#console").prepend(timeStamp + " " + s + '<br>');
 }
+
+
 
 function initializeSession() {
     var session = OT.initSession(apiKey, sessionId);
@@ -27,24 +34,19 @@ function initializeSession() {
             subscriberProperties,
             function (error) {
                 if (error) {
-                    console.log(error);
+                    logToConsole(error);
                 } else {
-                    console.log('Subscriber added.');
+                    logToConsole('Subscriber added.');
                 }
             });
 
-    subscriber.on('audioLevelUpdated', function (event) {
-        logToConsole("suscriber audioLevel " + event.audioLevel);
-    });
-    
-    subscriber.setStyle('audioLevelDisplayMode', 'on');
+        subscriber.setStyle('audioLevelDisplayMode', 'on');
 
         /*
-
         SpeakerDetection(subscriber, function () {
-            console.log('started talking');
+            logToConsole('started talking');
         }, function () {
-            console.log('stopped talking');
+            logToConsole('stopped talking');
         });
 
         var SpeakerDetection = function (subscriber, startTalking, stopTalking) {
@@ -78,8 +80,7 @@ function initializeSession() {
         */
     });
 
-    // Connect to the session
-    session.connect(token, function (error) {
+    function initializePublisher(error) {
         // If the connection is successful, initialize a publisher and publish to the session
         if (!error) {
             var publisher = OT.initPublisher('publisher', {
@@ -88,19 +89,47 @@ function initializeSession() {
                 height: '100%'
             });
 
-            publisher.on('audioLevelUpdated', function(event) {
-                console.log("publisher audioLevel " + event.audioLevel);
-            });
-
             publisher.setStyle('audioLevelDisplayMode', 'on');
-
-
+            publisher.on('audioLevelUpdated', function (event) {
+                var audioLevel = event.audioLevel;
+                if (audioLevel > 0.2) {
+                    logToConsole(" Currently talking. audioLevel " + event.audioLevel);
+                }
+            });
             session.publish(publisher);
         } else {
             logToConsole('There was an error connecting to the session: ', error.code, error.message);
         }
+    }
+
+    // Connect to the session
+    session.connect(token, initializePublisher);
+
+    function requestToTalk() {
+        logToConsole("Request to Talk");
+        session.signal(
+            {
+                data: "RequestToTalk " + userId
+            },
+            function (error) {
+                if (error) {
+                    logToConsole("signal error ("
+                        + error.name
+                        + "): " + error.message);
+                } else {
+                    logToConsole("signal sent.");
+                }
+            }
+        );
+    }
+
+    $("#button1").click(requestToTalk);
+
+    session.on("signal", function (event) {        
+        if (!event.data.includes(userId)){
+            logToConsole("Signal sent from connection " + event.from.id);
+            logToConsole("Signal data " + event.data);
+        }
     });
-
-
 
 }
