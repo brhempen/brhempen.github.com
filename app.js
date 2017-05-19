@@ -8,6 +8,8 @@ var connectionId;
 
 var allowedToTalk;
 
+var connectionCount = 0;
+var suscriberCount = 0;
 
 $(document).ready(function () {
     // (optional) add server code here
@@ -25,13 +27,18 @@ function initializeSession() {
 
     // Subscribe to a newly created stream
     session.on('streamCreated', function (event) {
+
         var subscriberProperties = {
             insertMode: 'append',
             width: '100%',
             height: '100%'
         };
+
+        suscriberCount++;
+        var videoDivName = 'video' + (suscriberCount + 1);
+        
         var subscriber = session.subscribe(event.stream,
-            'subscriber',
+            videoDivName,
             subscriberProperties,
             function (error) {
                 if (error) {
@@ -42,50 +49,13 @@ function initializeSession() {
             });
 
         subscriber.setStyle('audioLevelDisplayMode', 'on');
-
-        /*
-        SpeakerDetection(subscriber, function () {
-            logToConsole('started talking');
-        }, function () {
-            logToConsole('stopped talking');
-        });
-
-        var SpeakerDetection = function (subscriber, startTalking, stopTalking) {
-            var activity = null;
-            subscriber.on('audioLevelUpdated', function (event) {
-                var now = Date.now();
-                if (event.audioLevel > 0.2) {
-                    if (!activity) {
-                        activity = { timestamp: now, talking: false };
-                    } else if (activity.talking) {
-                        activity.timestamp = now;
-                    } else if (now - activity.timestamp > 1000) {
-                        // detected audio activity for more than 1s
-                        // for the first time.
-                        activity.talking = true;
-                        if (typeof (startTalking) === 'function') {
-                            startTalking();
-                        }
-                    }
-                } else if (activity && now - activity.timestamp > 3000) {
-                    // detected low audio activity for more than 3s
-                    if (activity.talking) {
-                        if (typeof (stopTalking) === 'function') {
-                            stopTalking();
-                        }
-                    }
-                    activity = null;
-                }
-            });
-        };
-        */
     });
 
-    var publisher; 
+    var publisher;
     function initializePublisher(error) {
         // If the connection is successful, initialize a publisher and publish to the session
         if (!error) {
-            publisher = OT.initPublisher('publisher', {
+            publisher = OT.initPublisher('video1', {
                 insertMode: 'append',
                 width: '100%',
                 height: '100%'
@@ -104,18 +74,18 @@ function initializeSession() {
         }
     }
 
-    var connectionCount;
     session.on({
-        connectionCreated: function (event) {
+        'connectionCreated': function (event) {
             connectionCount++;
+            logToConsole("new connection in session : no. " + connectionCount);
             connectionId = session.connection.connectionId;
             if (event.connection.connectionId != session.connection.connectionId) {
-                console.log('Another client connected. ' + connectionCount + ' total.');
+                logToConsole('Another client connected to session');
             }
         },
-        connectionDestroyed: function connectionDestroyedHandler(event) {
+        'connectionDestroyed': function connectionDestroyedHandler(event) {
             connectionCount--;
-            console.log('A client disconnected. ' + connectionCount + ' total.');
+            logToConsole('A client disconnected from session');
         }
     });
 
@@ -133,17 +103,17 @@ function initializeSession() {
 
     $("#button1").click(requestToTalk);
 
-    function setNotification(txt){
+    function setNotification(txt) {
         $("#notifications").text(txt);
     }
 
-    function enableTalking(){
+    function enableTalking() {
         logToConsole("enabling talking");
         publisher.publishAudio(true);
         setNotification("You talk.");
     }
 
-    function disableTalking(){
+    function disableTalking() {
         logToConsole("disabling talking");
         publisher.publishAudio(false);
         setNotification("Someone else talks.");
@@ -168,5 +138,4 @@ function initializeSession() {
     }
 
     session.on("signal", receiveSignal);
-
 }

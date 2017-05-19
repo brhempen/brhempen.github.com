@@ -1,6 +1,13 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 body, html {
     background-color: gray;
     height: 100%;
+    width: 100%;
 }
 
 #videos {
@@ -12,11 +19,9 @@ body, html {
 }
 
 #console {
-    position: absolute;
-    width: 360px;
-    height: 240px;
-    bottom: 10px;
-    right: 10px;
+    width: 50%;
+    height: 50%;
+    float: left;
     z-index: 100;
     border: 3px solid white;
     border-radius: 3px;
@@ -27,10 +32,10 @@ body, html {
 
 #notifications {
     position: absolute;
-    width: 200px;
-    height: 60px;
+    width: 150px;
+    height: 50px;
     top: 10px;
-    left: 512px;
+    left: 200px;
     z-index: 100;
     border: 3px solid white;
     border-radius: 3px;
@@ -41,21 +46,28 @@ body, html {
     text-align: center;
 }
 
-#subscriber {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
+#video1 {
+    width: 50%;
+    height: 50%;
+    float: left;
+    z-index: 100;
+    border: 3px solid blue;
+    border-radius: 3px;
 }
 
-#publisher {
-    position: absolute;
-    width: 360px;
-    height: 240px;
-    bottom: 10px;
-    left: 10px;
+#video2 {
+    width: 50%;
+    height: 50%;
+    float: left;
+    z-index: 100;
+    border: 3px solid white;
+    border-radius: 3px;
+}
+
+#video3 {
+    width: 50%;
+    height: 50%;
+    float: left;
     z-index: 100;
     border: 3px solid white;
     border-radius: 3px;
