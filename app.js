@@ -133,14 +133,20 @@ function initializeSession() {
 
     $("#button1").click(requestToTalk);
 
+    function setNotification(txt){
+        $("#notifications").text(txt);
+    }
+
     function enableTalking(){
         logToConsole("enabling talking");
         publisher.publishAudio(true);
+        setNotification("You talk.");
     }
 
     function disableTalking(){
         logToConsole("disabling talking");
         publisher.publishAudio(false);
+        setNotification("Someone else talks.");
     }
 
     function receiveSignal(event) {
